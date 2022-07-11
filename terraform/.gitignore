@@ -1,0 +1,7 @@
+# Terraform providers
+.terraform/
+
+# Terraform lock and state
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup*
