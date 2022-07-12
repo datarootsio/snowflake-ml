@@ -95,7 +95,7 @@ resource "snowflake_table_grant" "comments" {
   table_name    = snowflake_table.comments.name
 
   privilege = "OWNERSHIP"
-  roles     = [snowflake_role.confluent.name, data.snowflake_role.accountadmin.name]
+  roles     = [snowflake_role.confluent.name]
   shares    = []
 }
 
@@ -105,6 +105,6 @@ resource "snowflake_table_grant" "posts" {
   table_name    = snowflake_table.posts.name
 
   privilege = "OWNERSHIP"
-  roles     = [snowflake_role.confluent.name, data.snowflake_role.accountadmin.name]
+  roles     = [snowflake_role.confluent.name]
   shares    = []
 }
