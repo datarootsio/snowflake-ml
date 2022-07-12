@@ -30,7 +30,3 @@ provider "confluent" {
 }
 
 data "snowflake_current_account" "this" {}
-
-output "snowflake_account_url" {
-  value = data.snowflake_current_account.this.url
-}
