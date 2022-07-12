@@ -36,3 +36,30 @@ variable "snowflake_confluent_user_rsa_key_public" {
   type        = string
   sensitive   = true
 }
+
+variable "confluent_cloud_api_key" {
+  description = "Confluent cloud API key."
+  type        = string
+  sensitive   = true
+}
+variable "confluent_cloud_api_secret" {
+  description = "Confluent cloud API key secret."
+  type        = string
+  sensitive   = true
+}
+
+variable "kafka_rest_endpoint" {
+  description = "Kafka cluster REST endpoint."
+  type        = string
+  sensitive   = true
+}
+variable "kafka_api_key" {
+  description = "Kafka cluster API key."
+  type        = string
+  sensitive   = true
+}
+variable "kafka_api_secret" {
+  description = "Kafka cluster API key secret."
+  type        = string
+  sensitive   = true
+}
