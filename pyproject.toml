@@ -23,3 +23,15 @@ ignore_missing_imports = true
 
 [tool.isort]
 profile = "black"
+
+[tool.sqlfluff.core]
+dialect = "snowflake"
+
+[tool.sqlfluff.rules.L010] # keywords
+capitalisation_policy = "upper"
+
+[tool.sqlfluff.rules.L016] # max-length
+ignore_comment_clauses = true
+ignore_comment_lines = true
+tab_space_sizes = 2
+max_line_length = 90
