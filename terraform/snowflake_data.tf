@@ -11,10 +11,10 @@ resource "snowflake_schema" "reddit" {
 }
 
 resource "snowflake_table" "comments" {
-  database = snowflake_schema.reddit.database
-  schema   = snowflake_schema.reddit.name
-  name     = "SNOWFLAKE_ML_REDDIT_COMMENTS_423303504"
-  #  comment             = "Reddit comments data."
+  database            = snowflake_schema.reddit.database
+  schema              = snowflake_schema.reddit.name
+  name                = "SNOWFLAKE_ML_REDDIT_COMMENTS_423303504"
+  comment             = "Reddit comments data."
   data_retention_days = snowflake_schema.reddit.data_retention_days
   change_tracking     = false
   column {
@@ -30,10 +30,10 @@ resource "snowflake_table" "comments" {
 }
 
 resource "snowflake_table" "posts" {
-  database = snowflake_schema.reddit.database
-  schema   = snowflake_schema.reddit.name
-  name     = "SNOWFLAKE_ML_REDDIT_POSTS_1911518057"
-  #  comment             = "Reddit comments data."
+  database            = snowflake_schema.reddit.database
+  schema              = snowflake_schema.reddit.name
+  name                = "SNOWFLAKE_ML_REDDIT_POSTS_1911518057"
+  comment             = "Reddit posts data."
   data_retention_days = snowflake_schema.reddit.data_retention_days
   change_tracking     = false
 
