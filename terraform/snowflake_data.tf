@@ -89,22 +89,79 @@ resource "snowflake_schema_grant" "reddit_create_pipe" {
   roles     = [snowflake_role.confluent.name]
 }
 
-resource "snowflake_table_grant" "comments" {
+resource "snowflake_schema_grant" "reddit_create_materialized_view" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+
+  privilege = "CREATE MATERIALIZED VIEW"
+  roles     = [snowflake_role.confluent.name]
+}
+
+resource "snowflake_table_grant" "comments_ownership" {
   database_name = snowflake_database.snowflake_ml.name
   schema_name   = snowflake_schema.reddit.name
   table_name    = snowflake_table.comments.name
 
   privilege = "OWNERSHIP"
-  roles     = [snowflake_role.confluent.name]
+  roles     = [data.snowflake_role.accountadmin.name]
   shares    = []
 }
 
-resource "snowflake_table_grant" "posts" {
+resource "snowflake_table_grant" "posts_ownership" {
   database_name = snowflake_database.snowflake_ml.name
   schema_name   = snowflake_schema.reddit.name
   table_name    = snowflake_table.posts.name
 
   privilege = "OWNERSHIP"
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}
+
+resource "snowflake_table_grant" "comments_select" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  table_name    = snowflake_table.comments.name
+
+  privilege = "SELECT"
   roles     = [snowflake_role.confluent.name]
   shares    = []
+}
+
+resource "snowflake_table_grant" "posts_select" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  table_name    = snowflake_table.posts.name
+
+  privilege = "SELECT"
+  roles     = [snowflake_role.confluent.name]
+  shares    = []
+}
+
+resource "snowflake_materialized_view_grant" "flattened_comments" {
+  database_name          = snowflake_database.snowflake_ml.name
+  schema_name            = snowflake_schema.reddit.name
+  materialized_view_name = "FLATTENED_COMMENTS"
+
+  privilege = "OWNERSHIP"
+  roles = [
+    data.snowflake_role.accountadmin.name
+  ]
+  shares = []
+}
+
+# Could not create in terraform, nor create manually and import
+# https://github.com/Snowflake-Labs/terraform-provider-snowflake/issues/818
+#resource "snowflake_materialized_view" "flattened_comments" {
+#    database = snowflake_schema.reddit.database
+#  schema   = snowflake_schema.reddit.name
+#  warehouse = snowflake_warehouse.reddit_xs.name
+#  name      = "FLATTENED_COMMENTS"
+#
+#  statement  = file("${path.module}/../sql/flattened_comments.sql")
+#  or_replace = true
+#}
+
+data "snowflake_materialized_views" "reddit" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
 }
