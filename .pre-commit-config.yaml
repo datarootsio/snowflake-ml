@@ -26,8 +26,13 @@ repos:
       - id: mypy
         additional_dependencies:
           - types-all==1.0.0
-          - cumulio==0.2.3
+          - snowflake-snowpark-python==0.7.0
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.73.0
     hooks:
       - id: terraform_fmt
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 1.2.1
+    hooks:
+      - id: sqlfluff-fix
+      - id: sqlfluff-lint
