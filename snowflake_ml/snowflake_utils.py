@@ -75,10 +75,18 @@ if __name__ == "__main__":
         schema="reddit",
     ) as session:
 
-        df = session.sql(
+        flattened_comments = session.sql(
             "create or replace materialized"
             " view snowflake_ml.reddit.flattened_comments as\n"
             + (PATH_SQL / "flattened_comments.sql").read_text()
         )
 
-        print(df.collect())
+        print(flattened_comments.collect())
+
+        flattened_posts = session.sql(
+            "create or replace materialized"
+            " view snowflake_ml.reddit.flattened_posts as\n"
+            + (PATH_SQL / "flattened_posts.sql").read_text()
+        )
+
+        print(flattened_posts.collect())
