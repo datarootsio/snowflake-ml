@@ -64,6 +64,16 @@ class SessionML(Session):
 if __name__ == "__main__":
     PATH_SQL = Path(__file__).parents[1] / "sql"
 
+    def _create_matview_from_file(
+        file: Path, session: SessionML, materialized: bool = True
+    ) -> None:
+        """Small convenience function to create materialized views from files."""
+        table = session.sql(
+            f"create or replace materialized"
+            f" view snowflake_ml.reddit.{file.stem} as\n" + file.read_text()
+        )
+        print(table.collect())
+
     # Using `private_key_filepath` and `private_key_passphrase` from env vars
     with SessionML(
         database="snowflake_ml",
@@ -74,19 +84,14 @@ if __name__ == "__main__":
         region="eu-central-1",
         schema="reddit",
     ) as session:
-
-        flattened_comments = session.sql(
-            "create or replace materialized"
-            " view snowflake_ml.reddit.flattened_comments as\n"
-            + (PATH_SQL / "flattened_comments.sql").read_text()
-        )
-
-        print(flattened_comments.collect())
-
-        flattened_posts = session.sql(
-            "create or replace materialized"
-            " view snowflake_ml.reddit.flattened_posts as\n"
-            + (PATH_SQL / "flattened_posts.sql").read_text()
-        )
-
-        print(flattened_posts.collect())
+        for file in ["flattened_posts.sql", "flattened_comments.sql"]:
+            _create_matview_from_file(file=PATH_SQL / file, session=session)
+        for file in [
+            "flattened_posts_typed.sql",
+            "flattened_comments_typed.sql",
+            "aggregated_comments.sql",
+        ]:
+            sqlpath = PATH_SQL / file
+            session.sql(sqlpath.read_text()).create_or_replace_view(
+                f"snowflake_ml.reddit.{sqlpath.stem}"
+            )
