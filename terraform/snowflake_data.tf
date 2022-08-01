@@ -83,8 +83,7 @@ resource "snowflake_view" "comments_typed" {
   name     = "COMMENTS_TYPED"
   comment  = "Add the correct types to the flattened JSON from Reddit's comment data."
 
-  statement = file("${path.module}/../sql/flattened_comments_typed.sql")
-
+  statement  = file("${path.module}/../sql/flattened_comments_typed.sql")
   or_replace = true
   is_secure  = false
 }
@@ -93,7 +92,7 @@ resource "snowflake_view" "posts_aggregated" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
   name     = "AGGREGATED_POSTS"
-  comment  = "Add the correct types to the flattened JSON from Reddit's posts data."
+  comment  = "Aggregate posts to number of records, average length of title and body."
 
   statement  = file("${path.module}/../sql/aggregated_posts.sql")
   or_replace = true
@@ -104,10 +103,9 @@ resource "snowflake_view" "comments_aggregated" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
   name     = "AGGREGATED_COMMENTS"
-  comment  = "Add the correct types to the flattened JSON from Reddit's comment data."
+  comment  = "Aggregate comments to number of records, average length of title and body."
 
-  statement = file("${path.module}/../sql/aggregated_comments.sql")
-
+  statement  = file("${path.module}/../sql/aggregated_comments.sql")
   or_replace = true
   is_secure  = false
 }
