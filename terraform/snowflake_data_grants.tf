@@ -92,8 +92,26 @@ resource "snowflake_materialized_view_grant" "flattened_comments" {
   materialized_view_name = "FLATTENED_COMMENTS"
 
   privilege = "OWNERSHIP"
-  roles = [
-    data.snowflake_role.accountadmin.name
-  ]
-  shares = []
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}
+
+resource "snowflake_view_grant" "posts_typed" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  view_name     = snowflake_view.posts_typed.name
+
+  privilege = "OWNERSHIP"
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}
+
+resource "snowflake_view_grant" "comments_typed" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  view_name     = snowflake_view.comments_typed.name
+
+  privilege = "OWNERSHIP"
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
 }

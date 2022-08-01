@@ -65,3 +65,26 @@ data "snowflake_materialized_views" "reddit" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
 }
+
+resource "snowflake_view" "posts_typed" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "POSTS_TYPED"
+  comment  = "Add the correct types to the flattened JSON from Reddit's posts data."
+
+  statement  = file("${path.module}/../sql/flattened_posts_typed.sql")
+  or_replace = true
+  is_secure  = false
+}
+
+resource "snowflake_view" "comments_typed" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "COMMENTS_TYPED"
+  comment  = "Add the correct types to the flattened JSON from Reddit's comment data."
+
+  statement = file("${path.module}/../sql/flattened_comments_typed.sql")
+
+  or_replace = true
+  is_secure  = false
+}
