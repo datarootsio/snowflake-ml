@@ -88,3 +88,26 @@ resource "snowflake_view" "comments_typed" {
   or_replace = true
   is_secure  = false
 }
+
+resource "snowflake_view" "posts_aggregated" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "AGGREGATED_POSTS"
+  comment  = "Add the correct types to the flattened JSON from Reddit's posts data."
+
+  statement  = file("${path.module}/../sql/aggregated_posts.sql")
+  or_replace = true
+  is_secure  = false
+}
+
+resource "snowflake_view" "comments_aggregated" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "AGGREGATED_COMMENTS"
+  comment  = "Add the correct types to the flattened JSON from Reddit's comment data."
+
+  statement = file("${path.module}/../sql/aggregated_comments.sql")
+
+  or_replace = true
+  is_secure  = false
+}

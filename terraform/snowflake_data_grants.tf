@@ -115,3 +115,23 @@ resource "snowflake_view_grant" "comments_typed" {
   roles     = [data.snowflake_role.accountadmin.name]
   shares    = []
 }
+
+resource "snowflake_view_grant" "posts_aggregated" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  view_name     = snowflake_view.posts_aggregated.name
+
+  privilege = "OWNERSHIP"
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}
+
+resource "snowflake_view_grant" "comments_aggregated" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  view_name     = snowflake_view.comments_typed.name
+
+  privilege = "OWNERSHIP"
+  roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}

@@ -16,7 +16,7 @@ WITH dims AS (
         END AS subreddit,
         date(created_utc) AS created_date
     FROM
-        flattened_comments_typed
+        comments_typed
 )
 
 SELECT

@@ -33,7 +33,7 @@ WITH dims AS (
         END AS thumbnail,
         date(created_utc) AS created_date
     FROM
-        flattened_posts_typed
+        posts_typed
     WHERE
         NOT over_18
 )
