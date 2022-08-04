@@ -32,10 +32,8 @@ SELECT
 FROM
     dims
 GROUP BY
-    CUBE(
-        subreddit_type,
-        stickied,
-        controversiality,
-        subreddit,
-        created_date
-    );
+    created_date,
+    subreddit_type,
+    stickied,
+    controversiality,
+    subreddit;

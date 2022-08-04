@@ -11,8 +11,8 @@ WITH dims AS (
         CASE
             WHEN subreddit = 'AskReddit' THEN 'AskReddit'
             WHEN subreddit = 'nba' THEN 'nba'
-            WHEN subreddit = 'interestingasfuck' THEN 'interestingasfuck'
-            WHEN subreddit = 'Unexpected' THEN 'Unexpected'
+            WHEN subreddit = 'newsbotbot' THEN 'newsbotbot'
+            WHEN subreddit = 'NoStupidQuestions' THEN 'NoStupidQuestions'
             ELSE 'Other'
         END AS subreddit,
         CASE
@@ -44,7 +44,7 @@ SELECT
     thumbnail,
     created_date,
     stickied,
-    count(record_id) AS number_or_records,
+    count(record_id) AS number_of_records,
     count(DISTINCT author) AS number_of_authors,
     avg(len(title)) AS average_title_length,
     avg(len(selftext)) AS average_body_length,
@@ -53,10 +53,8 @@ SELECT
 FROM
     dims
 GROUP BY
-    CUBE(
-        subreddit,
-        domain,
-        thumbnail,
-        created_date,
-        stickied
-    );
+    created_date,
+    subreddit,
+    domain,
+    thumbnail,
+    stickied;
