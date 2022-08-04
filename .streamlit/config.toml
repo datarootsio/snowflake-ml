@@ -1,0 +1,63 @@
+[global]
+disableWatchdogWarning = false
+showWarningOnDirectExecution = true
+dataFrameSerialization = "arrow"
+
+[logger]
+level = "info"
+messageFormat = "%(asctime)s %(message)s"
+
+[client]
+caching = true
+displayEnabled = true
+showErrorDetails = true
+
+
+[runner]
+magicEnabled = true
+installTracer = false
+fixMatplotlib = true
+postScriptGC = true
+fastReruns = false
+
+[server]
+folderWatchBlacklist = []
+fileWatcherType = "auto"
+# Symmetric key used to produce signed cookies. If deploying on multiple replicas, this should be set to the same value across all replicas to ensure they all share the same secret.
+# Default: randomly generated secret key.
+#cookieSecret =
+headless = false
+runOnSave = false
+# The address where the server will listen for client and browser connections. Use this if you want to bind the server to a specific address. If set, the server will only be accessible from this address, and not from any aliases (like localhost).
+# Default: (unset)
+# address =
+#port = 8501
+baseUrlPath = ""
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 200
+maxMessageSize = 200
+enableWebsocketCompression = false
+
+[browser]
+# Internet address where users should point their browsers in order to connect to the app. Can be IP address or DNS name and path.
+# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser
+# Default: 'localhost'
+serverAddress = "localhost"
+gatherUsageStats = false
+serverPort = 8501
+
+[mapbox]
+token = ""
+
+[deprecation]
+showfileUploaderEncoding = true
+showPyplotGlobalUse = true
+
+[theme]
+base = "light"
+primaryColor = "#00b189"
+backgroundColor = "#f7f3f3"
+secondaryBackgroundColor = "#365abd"
+textColor = "#272626"
+font = "sans serif"

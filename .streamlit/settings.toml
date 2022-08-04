@@ -1,0 +1,3 @@
+[app]
+about = "README.md"
+favicon = "dashboard/static/favicon-32x32.png"
