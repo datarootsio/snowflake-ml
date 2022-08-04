@@ -146,4 +146,29 @@ with col2:
         height=500,
     )
 
-print(df.dtypes)
+col1, col2 = st.columns(2)
+with col1:
+    col = st.selectbox(
+        "Dimension", options=df.select_dtypes(include=["boolean", "string"]).columns
+    )
+    sel = st.selectbox(
+        "Dimension",
+        options=df.select_dtypes(include="number", exclude="boolean").columns,
+    )
+with col2:
+    _df = (
+        df.set_index("CREATED_DATE")
+        .loc[
+            :,
+            lambda _df: _df.select_dtypes(
+                exclude=["boolean", "string"]
+            ).columns.tolist()
+            + [col],
+        ]
+        .groupby(["CREATED_DATE", col])
+        .sum()
+        .loc[:, sel]
+        .unstack()
+        .rename_axis(None, axis="columns")
+    )
+    st.area_chart(_df, height=200)
