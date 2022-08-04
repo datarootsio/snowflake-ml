@@ -10,8 +10,8 @@ WITH dims AS (
         CASE
             WHEN subreddit = 'AskReddit' THEN 'AskReddit'
             WHEN subreddit = 'nba' THEN 'nba'
-            WHEN subreddit = 'interestingasfuck' THEN 'interestingasfuck'
-            WHEN subreddit = 'Unexpected' THEN 'Unexpected'
+            WHEN subreddit = 'newsbotbot' THEN 'newsbotbot'
+            WHEN subreddit = 'NoStupidQuestions' THEN 'NoStupidQuestions'
             ELSE 'Other'
         END AS subreddit,
         date(created_utc) AS created_date
