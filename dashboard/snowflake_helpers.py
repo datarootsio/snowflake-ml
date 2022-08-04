@@ -19,8 +19,14 @@ def snowflake2pd(table: str, _session: SessionML) -> pd.DataFrame:
 
 def convert_df_types(df: pd.DataFrame) -> pd.DataFrame:
     """Convert dataframe types."""
+    # Manually map types that are not converted correctly
+    d_types = {
+        "AVERAGE_TITLE_LENGTH": "float64",
+        "AVERAGE_BODY_LENGTH": "float64",
+        "CONTROVERSIALITY": "boolean",
+    }
     return (
         df.copy(deep=True)
-        .astype({c: "float64" for c in ("AVERAGE_TITLE_LENGTH", "AVERAGE_BODY_LENGTH")})
+        .astype({k: v for k, v in d_types.items() if k in df.columns})
         .convert_dtypes()
     )
