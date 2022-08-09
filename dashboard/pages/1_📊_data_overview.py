@@ -28,7 +28,7 @@ def _filter_options(
     dim_cols: Sequence[str],
     *,
     st_key: str,
-    date_col: str = "CREATED_DATE"
+    date_col: str = "CREATED_DATE",
 ) -> Tuple[Dict[str, Sequence[str]], Tuple[date, date]]:
     """Get filtering options based on elements sent to dashboard."""
     # String filters
@@ -44,7 +44,7 @@ def _filter_options(
         min_value=_ds.min(),
         max_value=_ds.max(),
         value=(_ds.min(), _ds.max()),
-        key=st_key + date_col,
+        key=f"{st_key}_{date_col}",
     )
     return selected, dates
 
@@ -110,8 +110,8 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
 
     col1, col2 = st.columns(2)
     with col1:
-        col = st.selectbox("Dimension", options=dim_cols, key=st_key + "dim")
-        sel = st.selectbox("Metric", options=agg_cols, key=st_key + "metric")
+        col = st.selectbox("Dimension", options=dim_cols, key=f"{st_key}_dim")
+        sel = st.selectbox("Metric", options=agg_cols, key=f"{st_key}_metric")
 
         st.area_chart(
             df[["CREATED_DATE", sel, col]]
