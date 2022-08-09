@@ -25,4 +25,4 @@ def convert_df_types(
     """Convert dataframe types."""
     # Manually map types that are not converted correctly
     dtype_mapping = dtype_mapping or {}
-    return df.copy(deep=True).astype(dtype_mapping).convert_dtypes()
+    return df.copy(deep=True).convert_dtypes().astype(dtype_mapping)

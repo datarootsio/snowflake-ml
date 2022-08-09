@@ -124,8 +124,23 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
         )
 
     with col2:
+
+        _df = (
+            df[["CREATED_DATE", "NUMBER_OF_RECORDS", *avg_cols]]
+            .groupby(["CREATED_DATE"])
+            .sum()
+            .assign(
+                AVERAGE_TITLE_LENGTH=lambda _df: _df["SUM_TITLE_LENGTH"]
+                / _df["NUMBER_OF_RECORDS"]
+            )
+            .assign(
+                AVERAGE_BODY_LENGTH=lambda _df: _df["SUM_BODY_LENGTH"]
+                / _df["NUMBER_OF_RECORDS"]
+            )
+            .loc[:, ["AVERAGE_TITLE_LENGTH", "AVERAGE_BODY_LENGTH"]]
+        )
         st.line_chart(
-            df.loc[:, ["CREATED_DATE", *avg_cols]].groupby("CREATED_DATE").mean(),
+            _df,
             height=400,
         )
 
@@ -141,6 +156,7 @@ def _plot_summary(
     _timeseries(df, st_key=st_key)
 
 
+# Main app
 session = init_connection()
 
 _plot_summary(
@@ -148,8 +164,8 @@ _plot_summary(
     table_name="aggregated_posts",
     session=session,
     st_key="posts",
-    AVERAGE_TITLE_LENGTH="float64",
-    AVERAGE_BODY_LENGTH="float64",
+    SUM_TITLE_LENGTH="float64",
+    SUM_BODY_LENGTH="float64",
 )
 
 _plot_summary(
@@ -157,7 +173,7 @@ _plot_summary(
     table_name="aggregated_comments",
     session=session,
     st_key="comments",
-    AVERAGE_TITLE_LENGTH="float64",
-    AVERAGE_BODY_LENGTH="float64",
+    SUM_TITLE_LENGTH="float64",
+    SUM_BODY_LENGTH="float64",
     CONTROVERSIALITY="boolean",
 )
