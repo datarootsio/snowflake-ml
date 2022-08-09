@@ -25,7 +25,7 @@ SELECT
     controversiality,
     subreddit,
     created_date,
-    count(record_id) AS number_or_records,
+    count(record_id) AS number_of_records,
     count(DISTINCT author) AS number_of_authors,
     sum(len(link_title)) AS sum_title_length,
     sum(len(body)) AS sum_body_length
