@@ -46,8 +46,8 @@ SELECT
     stickied,
     count(record_id) AS number_of_records,
     count(DISTINCT author) AS number_of_authors,
-    avg(len(title)) AS average_title_length,
-    avg(len(selftext)) AS average_body_length,
+    sum(len(title)) AS sum_title_length,
+    sum(len(selftext)) AS sum_body_length,
     sum(num_comments) AS number_of_comments,
     sum(score) AS total_score
 FROM

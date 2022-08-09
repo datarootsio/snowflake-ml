@@ -27,8 +27,8 @@ SELECT
     created_date,
     count(record_id) AS number_or_records,
     count(DISTINCT author) AS number_of_authors,
-    avg(len(link_title)) AS average_title_length,
-    avg(len(body)) AS average_body_length
+    sum(len(link_title)) AS sum_title_length,
+    sum(len(body)) AS sum_body_length
 FROM
     dims
 GROUP BY
