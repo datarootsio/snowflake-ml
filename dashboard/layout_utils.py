@@ -6,6 +6,7 @@ Based off of https://discuss.streamlit.io/t/st-footer/6447
 from typing import Union
 
 import streamlit as st
+import toml
 from htbuilder import HtmlElement, a, div, img, p, styles
 from htbuilder.units import percent, px
 
@@ -82,3 +83,11 @@ def footer() -> None:
         ),
     ]
     layout(*myargs)
+
+
+def set_layout(layout: str = "wide", **kwargs: str) -> None:
+    """Set the page layout."""
+    kwargs = {**toml.load(".streamlit/settings.toml").get("layout", {}), **kwargs}
+    st.set_page_config(layout=layout, **kwargs)
+    header()
+    footer()

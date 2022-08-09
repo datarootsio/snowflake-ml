@@ -1,5 +1,4 @@
 """Streamlit app."""
-import os
 from datetime import date
 from functools import reduce
 from operator import and_
@@ -7,20 +6,10 @@ from typing import Any, Dict, Sequence, Tuple
 
 import pandas as pd
 import streamlit as st
-import toml
 
-from dashboard.layout_utils import footer, header
+from dashboard.layout_utils import set_layout
 from dashboard.snowflake_helpers import convert_df_types, init_connection, snowflake2pd
 from snowflake_ml import SessionML
-
-if os.getenv("ST_ENV") != "DEV":
-    st.set_page_config(
-        page_title="Reddit-Snowflake",
-        page_icon=toml.load(".streamlit/settings.toml").get("app", {}).get("favicon"),
-        layout="wide",
-    )
-    header()
-    footer()
 
 
 def _filter_options(
@@ -149,7 +138,7 @@ def _plot_summary(
     title: str, table_name: str, session: SessionML, st_key: str, **dtypes_mapping: str
 ) -> None:
     """Plot summaries for Snowflake table."""
-    st.markdown(title)
+    st.title(title)
     df = snowflake2pd(table_name, _session=session)
     df = convert_df_types(df, dtype_mapping=dtypes_mapping)
     _aggregated(df, st_key=st_key)
@@ -157,10 +146,11 @@ def _plot_summary(
 
 
 # Main app
+set_layout()
 session = init_connection()
 
 _plot_summary(
-    title="# Posts data",
+    title="Posts data",
     table_name="aggregated_posts",
     session=session,
     st_key="posts",
@@ -169,7 +159,7 @@ _plot_summary(
 )
 
 _plot_summary(
-    title="# Comments data",
+    title="Comments data",
     table_name="aggregated_comments",
     session=session,
     st_key="comments",
