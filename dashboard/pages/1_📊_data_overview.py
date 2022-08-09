@@ -93,7 +93,7 @@ with col1:
         "Dimension", options=df.select_dtypes(include=["boolean", "string"]).columns
     )
     sel = st.selectbox(
-        "Dimension",
+        "Metric",
         options=df.select_dtypes(include="number", exclude="boolean").columns,
     )
 with col2:
@@ -152,7 +152,7 @@ with col1:
         "Dimension", options=df.select_dtypes(include=["boolean", "string"]).columns
     )
     sel = st.selectbox(
-        "Dimension",
+        "Metric",
         options=df.select_dtypes(include="number", exclude="boolean").columns,
     )
 with col2:
