@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "snowflake-ml"
-version = "0.1.0"
+version = "0.0.0-dev"  # set dynamically
 description = ""
 authors = ["Murilo Cunha <murilo@dataroots.io>"]
 
@@ -14,6 +14,9 @@ streamlit = "^1.11.1"
 htbuilder = "^0.6.0"
 toml = "^0.10.2"
 mistune = "^2.0"
+vendorize = "^0.2.2"
+scikit-learn = "^1.1.2"
+matplotlib = "^3.5.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -21,9 +24,13 @@ build-backend = "poetry.core.masonry.api"
 
 # Devtools not in environment, but used in `pre-commit`
 [tool.mypy]
-disallow_untyped_calls = true
+disallow_untyped_calls = false
 disallow_untyped_defs = true
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "snowflake_ml._vendor.*"
+disallow_untyped_defs = false
 
 [tool.isort]
 profile = "black"

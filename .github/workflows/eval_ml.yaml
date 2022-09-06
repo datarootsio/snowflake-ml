@@ -1,0 +1,87 @@
+name: eval-ml
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  get-latest-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      latest-tag: ${{ steps.latest-tag.outputs.tag }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}  # checkout the correct branch name
+          fetch-depth: 0               # fetch the whole repo history
+      - name: Get latest git tag
+        id: latest-tag
+        run: |
+          latest_tag='0.0.0'
+          for ref in $(git for-each-ref --sort=-creatordate --format '%(refname)' refs/tags); do
+            tag="${ref#refs/tags/}"
+            echo "forloop"
+            echo $tag
+            if echo "${tag}" | grep -Eq '^v?([0-9]+)\.([0-9]+)\.([0-9]+)(?-([0-9A-Za-z-]+(?\.[0-9A-Za-z-]+)*))?(?\+[0-9A-Za-z-]+)?$'; then
+              latest_tag="${tag}"
+              echo $tag
+              echo "passed regex"
+              break
+            fi
+          done
+          echo "::set-output name=tag::${latest_tag}"
+      - name: Print latest tag
+        run: echo "${{ steps.latest-tag.outputs.tag }}"
+
+  eval:
+    runs-on: ubuntu-latest
+    needs: get-latest-tag
+    env:
+      POETRY_VERSION: 1.1.12
+      SNOWSQL_PRIVATE_KEY_PATH: ${{ github.workspace }}/snowflake.p8
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: iterative/setup-cml@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies and build package
+        run: |
+          pip install poetry==${{ env.POETRY_VERSION }}
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-ansi
+          poetry version ${{ needs.get-latest-tag.outputs.latest-tag }}
+          poetry version prerelease
+          poetry build --format wheel
+          # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "NEW_TAG=$(poetry version --short)" >> $GITHUB_ENV
+      - name: Set Snowflake key file
+        run: |
+          echo "${{ secrets.SNOWSQL_PRIVATE_KEY }}" > ${{ env.SNOWSQL_PRIVATE_KEY_PATH }}
+      - name: cml
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SNOWSQL_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWSQL_PRIVATE_KEY_PASSPHRASE }}
+          SNOWSQL_PRIVATE_KEY_FILEPATH: ${{ env.SNOWSQL_PRIVATE_KEY_PATH }}
+        run: |
+          python scripts/create_inference_udf.py
+          python scripts/eval.py
+
+          cat report.txt >> report.md
+          cml publish roc.png --md >> report.md
+          cml publish cnf_mat.png --md >> report.md
+          cml send-comment report.md
+      - name: Tag
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ env.NEW_TAG }}",
+              sha: "${{ github.event.pull_request.head.sha }}"
+            })

@@ -1,0 +1,5 @@
+target = "snowflake_ml/_vendor"
+packages = [
+    "profanityfilter",
+    "inflection"
+]

@@ -1,1 +1,3 @@
-from snowflake_ml.snowflake_utils import SessionML
+from importlib.metadata import version
+
+__version__ = version(__package__ or __name__)
