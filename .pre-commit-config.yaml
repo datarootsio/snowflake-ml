@@ -1,5 +1,6 @@
 default_language_version:
     python: python3.8
+exclude: "snowflake_ml/_vendor/"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.2.0
