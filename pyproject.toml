@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "snowflake-ml"
-version = "0.1.0"
+version = "0.0.0-dev"  # set dynamically
 description = ""
 authors = ["Murilo Cunha <murilo@dataroots.io>"]
 
