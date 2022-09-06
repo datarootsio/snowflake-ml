@@ -7,10 +7,11 @@ from typing import Optional
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from snowflake.snowpark._internal.server_connection import ServerConnection
-from snowflake.snowpark.session import Session, _add_session
+from snowflake.snowpark.session import Session as SnowparkSession
+from snowflake.snowpark.session import _add_session
 
 
-class SessionML(Session):
+class Session(SnowparkSession):
     """Wrapper to use private keys to connect to Snowflake server."""
 
     def __init__(
@@ -41,6 +42,7 @@ class SessionML(Session):
                 or os.environ.get("SNOWSQL_PRIVATE_KEY_PASSPHRASE")
                 or getpass("Snowflake key passphrase:")
             )
+
             with private_key_filepath.open("rb") as key:
                 private_key = serialization.load_pem_private_key(
                     key.read(),
@@ -52,10 +54,9 @@ class SessionML(Session):
                 format=serialization.PrivateFormat.PKCS8,
                 encryption_algorithm=serialization.NoEncryption(),
             )
-            private_key_passphrase = None  # overwrite secret values
             session_builder_kwargs = {
                 **session_builder_kwargs,
                 "private_key": private_key_contents,
             }
-        super(SessionML, self).__init__(conn=ServerConnection(session_builder_kwargs))
+        super(Session, self).__init__(conn=ServerConnection(session_builder_kwargs))
         _add_session(self)
