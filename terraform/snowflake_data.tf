@@ -109,3 +109,118 @@ resource "snowflake_view" "comments_aggregated" {
   or_replace = true
   is_secure  = false
 }
+
+
+#TODO
+resource "snowflake_table" "ml_posts" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "ML_POSTS"
+  #  comment             = "Reddit posts data."
+  data_retention_days = snowflake_schema.reddit.data_retention_days
+  change_tracking     = true
+
+  column {
+    name     = "RECORD_ID"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "CREATED_TIMESTAMP"
+    nullable = true
+    type     = "TIMESTAMP_NTZ(9)"
+  }
+  column {
+    name     = "SUBREDDIT"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "AUTHOR"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "TITLE"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+}
+resource "snowflake_table" "ml_posts_clean" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "ML_POSTS_CLEAN"
+  #  comment             = "Reddit posts data."
+  data_retention_days = snowflake_schema.reddit.data_retention_days
+  change_tracking     = true
+
+  column {
+    name     = "RECORD_ID"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "CREATED_TIMESTAMP"
+    nullable = true
+    type     = "TIMESTAMP_NTZ(9)"
+  }
+  column {
+    name     = "SUBREDDIT"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "AUTHOR"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "TITLE"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+}
+resource "snowflake_table" "ml_posts_predictions" {
+  database = snowflake_schema.reddit.database
+  schema   = snowflake_schema.reddit.name
+  name     = "ML_POSTS_PREDICTIONS"
+  #  comment             = "Reddit posts data."
+  data_retention_days = snowflake_schema.reddit.data_retention_days
+  change_tracking     = false
+
+  column {
+    name     = "RECORD_ID"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "CREATED_TIMESTAMP"
+    nullable = true
+    type     = "TIMESTAMP_NTZ(9)"
+  }
+  column {
+    name     = "SUBREDDIT"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "AUTHOR"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "TITLE"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+  column {
+    name     = "IS_TOXIC"
+    nullable = true
+    type     = "NUMBER(38,0)"
+  }
+  column {
+    name     = "MODEL_VERSION"
+    nullable = true
+    type     = "VARCHAR(16777216)"
+  }
+}
