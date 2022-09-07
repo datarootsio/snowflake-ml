@@ -116,7 +116,8 @@ resource "snowflake_table" "ml_posts" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
   name     = "ML_POSTS"
-  #  comment             = "Reddit posts data."
+  comment  = "Reddit posts to be used in ML use case."
+
   data_retention_days = snowflake_schema.reddit.data_retention_days
   change_tracking     = true
 
@@ -150,7 +151,8 @@ resource "snowflake_table" "ml_posts_clean" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
   name     = "ML_POSTS_CLEAN"
-  #  comment             = "Reddit posts data."
+  comment  = "Same as `ML_POSTS`, but titles have ASCII-only characters."
+
   data_retention_days = snowflake_schema.reddit.data_retention_days
   change_tracking     = true
 
@@ -184,7 +186,8 @@ resource "snowflake_table" "ml_posts_predictions" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
   name     = "ML_POSTS_PREDICTIONS"
-  #  comment             = "Reddit posts data."
+  comment  = "Same as `ML_POSTS_CLEAN`, but include model inference and version."
+
   data_retention_days = snowflake_schema.reddit.data_retention_days
   change_tracking     = false
 
