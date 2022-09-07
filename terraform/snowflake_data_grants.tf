@@ -141,3 +141,36 @@ resource "snowflake_view_grant" "comments_aggregated" {
   roles     = [data.snowflake_role.accountadmin.name]
   shares    = []
 }
+
+resource "snowflake_table_grant" "ml_posts" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  table_name    = snowflake_table.ml_posts.name
+
+  with_grant_option = true
+  privilege         = "OWNERSHIP"
+  roles             = [data.snowflake_role.accountadmin.name]
+  shares            = []
+}
+
+resource "snowflake_table_grant" "ml_posts_clean" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  table_name    = snowflake_table.ml_posts_clean.name
+
+  with_grant_option = true
+  privilege         = "OWNERSHIP"
+  roles             = [data.snowflake_role.accountadmin.name]
+  shares            = []
+}
+
+resource "snowflake_table_grant" "ml_posts_predictions" {
+  database_name = snowflake_database.snowflake_ml.name
+  schema_name   = snowflake_schema.reddit.name
+  table_name    = snowflake_table.ml_posts_predictions.name
+
+  with_grant_option = true
+  privilege         = "OWNERSHIP"
+  roles             = [data.snowflake_role.accountadmin.name]
+  shares            = []
+}
