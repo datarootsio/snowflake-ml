@@ -16,7 +16,7 @@ resource "snowflake_table" "comments" {
   name                = "SNOWFLAKE_ML_REDDIT_COMMENTS_423303504"
   comment             = "Reddit comments data."
   data_retention_days = snowflake_schema.reddit.data_retention_days
-  change_tracking     = false
+  change_tracking     = true
   column {
     name = "RECORD_METADATA"
     type = "VARIANT"
@@ -35,7 +35,7 @@ resource "snowflake_table" "posts" {
   name                = "SNOWFLAKE_ML_REDDIT_POSTS_1911518057"
   comment             = "Reddit posts data."
   data_retention_days = snowflake_schema.reddit.data_retention_days
-  change_tracking     = false
+  change_tracking     = true
 
   column {
     name     = "RECORD_METADATA"
