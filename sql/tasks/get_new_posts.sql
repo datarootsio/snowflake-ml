@@ -16,3 +16,4 @@ FROM
     new_posts
 WHERE
     metadata$action = 'INSERT'  -- noqa: L057
+    AND NOT record_content['over_18']::BOOLEAN
