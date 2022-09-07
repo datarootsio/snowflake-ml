@@ -42,3 +42,39 @@ resource "snowflake_task" "predict_ml_posts" {
   when    = "system$stream_has_data('new_ml_posts_clean')"
   enabled = true
 }
+
+resource "snowflake_stream" "new_posts" {
+  comment = "Watch for new posts coming from Confluent tables."
+
+  database = snowflake_database.snowflake_ml.name
+  schema   = snowflake_schema.reddit.name
+  name     = "NEW_POSTS"
+
+  on_table    = "${snowflake_table.posts.database}.${snowflake_table.posts.schema}.${snowflake_table.posts.name}"
+  append_only = true
+  insert_only = false
+}
+
+resource "snowflake_stream" "new_ml_posts" {
+  comment = "Watch for new entries in `ML_POSTS`."
+
+  database = snowflake_database.snowflake_ml.name
+  schema   = snowflake_schema.reddit.name
+  name     = "NEW_ML_POSTS"
+
+  on_table    = "${snowflake_table.ml_posts.database}.${snowflake_table.ml_posts.schema}.${snowflake_table.ml_posts.name}"
+  append_only = true
+  insert_only = false
+}
+
+resource "snowflake_stream" "new_ml_posts_clean" {
+  comment = "Watch for new entries in `ML_POSTS_CLEAN`."
+
+  database = snowflake_database.snowflake_ml.name
+  schema   = snowflake_schema.reddit.name
+  name     = "NEW_ML_POSTS_CLEAN"
+
+  on_table    = "${snowflake_table.ml_posts_clean.database}.${snowflake_table.ml_posts_clean.schema}.${snowflake_table.ml_posts_clean.name}"
+  append_only = true
+  insert_only = false
+}
