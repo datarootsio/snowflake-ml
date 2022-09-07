@@ -52,8 +52,11 @@ resource "snowflake_table_grant" "comments_ownership" {
   table_name    = snowflake_table.comments.name
 
   privilege = "OWNERSHIP"
-  roles     = [data.snowflake_role.accountadmin.name]
-  shares    = []
+  roles = [
+    snowflake_role.confluent.name,
+    # data.snowflake_role.accountadmin.name  # Cannot assign 2 roles
+  ]
+  shares = []
 }
 
 resource "snowflake_table_grant" "posts_ownership" {
@@ -62,8 +65,11 @@ resource "snowflake_table_grant" "posts_ownership" {
   table_name    = snowflake_table.posts.name
 
   privilege = "OWNERSHIP"
-  roles     = [data.snowflake_role.accountadmin.name]
-  shares    = []
+  roles = [
+    snowflake_role.confluent.name,
+    # data.snowflake_role.accountadmin.name  # Cannot assign 2 roles
+  ]
+  shares = []
 }
 
 resource "snowflake_table_grant" "comments_select" {
@@ -72,7 +78,7 @@ resource "snowflake_table_grant" "comments_select" {
   table_name    = snowflake_table.comments.name
 
   privilege = "SELECT"
-  roles     = [snowflake_role.confluent.name]
+  roles     = [data.snowflake_role.accountadmin.name]
   shares    = []
 }
 
@@ -82,7 +88,7 @@ resource "snowflake_table_grant" "posts_select" {
   table_name    = snowflake_table.posts.name
 
   privilege = "SELECT"
-  roles     = [snowflake_role.confluent.name]
+  roles     = [data.snowflake_role.accountadmin.name]
   shares    = []
 }
 
