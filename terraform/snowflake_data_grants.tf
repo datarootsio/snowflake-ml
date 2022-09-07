@@ -7,7 +7,7 @@ resource "snowflake_database_grant" "snowflake_ml" {
 }
 
 resource "snowflake_schema_grant" "reddit_usage" {
-  database_name = snowflake_database.snowflake_ml.name
+  database_name = snowflake_schema.reddit.database
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "USAGE"
@@ -15,7 +15,7 @@ resource "snowflake_schema_grant" "reddit_usage" {
 }
 
 resource "snowflake_schema_grant" "reddit_create_materialized_view" {
-  database_name = snowflake_database.snowflake_ml.name
+  database_name = snowflake_schema.reddit.database
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "CREATE MATERIALIZED VIEW"
@@ -23,7 +23,7 @@ resource "snowflake_schema_grant" "reddit_create_materialized_view" {
 }
 
 resource "snowflake_schema_grant" "reddit_create_table" {
-  database_name = snowflake_database.snowflake_ml.name
+  database_name = snowflake_schema.reddit.database
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "CREATE TABLE"
@@ -31,7 +31,7 @@ resource "snowflake_schema_grant" "reddit_create_table" {
 }
 
 resource "snowflake_schema_grant" "reddit_create_stage" {
-  database_name = snowflake_database.snowflake_ml.name
+  database_name = snowflake_schema.reddit.database
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "CREATE STAGE"
@@ -39,7 +39,7 @@ resource "snowflake_schema_grant" "reddit_create_stage" {
 }
 
 resource "snowflake_schema_grant" "reddit_create_pipe" {
-  database_name = snowflake_database.snowflake_ml.name
+  database_name = snowflake_schema.reddit.database
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "CREATE PIPE"
@@ -47,8 +47,8 @@ resource "snowflake_schema_grant" "reddit_create_pipe" {
 }
 
 resource "snowflake_table_grant" "comments_ownership" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.comments.database
+  schema_name   = snowflake_table.comments.schema
   table_name    = snowflake_table.comments.name
 
   privilege = "OWNERSHIP"
@@ -60,8 +60,8 @@ resource "snowflake_table_grant" "comments_ownership" {
 }
 
 resource "snowflake_table_grant" "posts_ownership" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.posts.database
+  schema_name   = snowflake_table.posts.schema
   table_name    = snowflake_table.posts.name
 
   privilege = "OWNERSHIP"
@@ -73,8 +73,8 @@ resource "snowflake_table_grant" "posts_ownership" {
 }
 
 resource "snowflake_table_grant" "comments_select" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.comments.database
+  schema_name   = snowflake_table.comments.schema
   table_name    = snowflake_table.comments.name
 
   privilege = "SELECT"
@@ -83,8 +83,8 @@ resource "snowflake_table_grant" "comments_select" {
 }
 
 resource "snowflake_table_grant" "posts_select" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.posts.database
+  schema_name   = snowflake_table.posts.schema
   table_name    = snowflake_table.posts.name
 
   privilege = "SELECT"
@@ -103,8 +103,8 @@ resource "snowflake_materialized_view_grant" "flattened_comments" {
 }
 
 resource "snowflake_view_grant" "posts_typed" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_view.posts_typed.database
+  schema_name   = snowflake_view.posts_typed.schema
   view_name     = snowflake_view.posts_typed.name
 
   privilege = "OWNERSHIP"
@@ -113,8 +113,8 @@ resource "snowflake_view_grant" "posts_typed" {
 }
 
 resource "snowflake_view_grant" "comments_typed" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_view.comments_typed.database
+  schema_name   = snowflake_view.comments_typed.schema
   view_name     = snowflake_view.comments_typed.name
 
   privilege = "OWNERSHIP"
@@ -123,8 +123,8 @@ resource "snowflake_view_grant" "comments_typed" {
 }
 
 resource "snowflake_view_grant" "posts_aggregated" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_view.posts_aggregated.database
+  schema_name   = snowflake_view.posts_aggregated.schema
   view_name     = snowflake_view.posts_aggregated.name
 
   privilege = "OWNERSHIP"
@@ -133,8 +133,8 @@ resource "snowflake_view_grant" "posts_aggregated" {
 }
 
 resource "snowflake_view_grant" "comments_aggregated" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_view.comments_typed.database
+  schema_name   = snowflake_view.comments_typed.schema
   view_name     = snowflake_view.comments_typed.name
 
   privilege = "OWNERSHIP"
@@ -143,8 +143,8 @@ resource "snowflake_view_grant" "comments_aggregated" {
 }
 
 resource "snowflake_table_grant" "ml_posts" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.ml_posts.database
+  schema_name   = snowflake_table.ml_posts.schema
   table_name    = snowflake_table.ml_posts.name
 
   with_grant_option = true
@@ -154,8 +154,8 @@ resource "snowflake_table_grant" "ml_posts" {
 }
 
 resource "snowflake_table_grant" "ml_posts_clean" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.ml_posts_clean.database
+  schema_name   = snowflake_table.ml_posts_clean.schema
   table_name    = snowflake_table.ml_posts_clean.name
 
   with_grant_option = true
@@ -165,8 +165,8 @@ resource "snowflake_table_grant" "ml_posts_clean" {
 }
 
 resource "snowflake_table_grant" "ml_posts_predictions" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_table.ml_posts_predictions.database
+  schema_name   = snowflake_table.ml_posts_predictions.schema
   table_name    = snowflake_table.ml_posts_predictions.name
 
   with_grant_option = true

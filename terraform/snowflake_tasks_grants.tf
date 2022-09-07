@@ -1,6 +1,6 @@
 resource "snowflake_task_grant" "get_new_posts" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_task.get_new_posts.database
+  schema_name   = snowflake_task.get_new_posts.schema
   task_name     = snowflake_task.get_new_posts.name
 
   privilege = "OWNERSHIP"
@@ -13,8 +13,8 @@ resource "snowflake_task_grant" "get_new_posts" {
 }
 
 resource "snowflake_task_grant" "clean_ml_posts" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_task.clean_ml_posts.database
+  schema_name   = snowflake_task.clean_ml_posts.schema
   task_name     = snowflake_task.clean_ml_posts.name
 
   privilege = "OWNERSHIP"
@@ -27,8 +27,8 @@ resource "snowflake_task_grant" "clean_ml_posts" {
 }
 
 resource "snowflake_task_grant" "predict_ml_posts" {
-  database_name = snowflake_database.snowflake_ml.name
-  schema_name   = snowflake_schema.reddit.name
+  database_name = snowflake_task.predict_ml_posts.database
+  schema_name   = snowflake_task.predict_ml_posts.schema
   task_name     = snowflake_task.predict_ml_posts.name
 
   privilege = "OWNERSHIP"
