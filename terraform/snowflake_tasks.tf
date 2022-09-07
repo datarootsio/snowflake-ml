@@ -1,5 +1,5 @@
 resource "snowflake_task" "get_new_posts" {
-  #  comment = "Get new posts from landing tables."
+  comment = "Extract, unpack and cast values of new posts from landing tables."
 
   database  = snowflake_database.snowflake_ml.name
   schema    = snowflake_schema.reddit.name
@@ -15,7 +15,7 @@ resource "snowflake_task" "get_new_posts" {
 }
 
 resource "snowflake_task" "clean_ml_posts" {
-  #  comment = "Get new posts from landing tables."
+  comment = "Clean post titles - remove non-ASCII characters from post title."
 
   database  = snowflake_database.snowflake_ml.name
   schema    = snowflake_schema.reddit.name
@@ -29,7 +29,7 @@ resource "snowflake_task" "clean_ml_posts" {
   enabled = true
 }
 resource "snowflake_task" "predict_ml_posts" {
-  #  comment = "Get new posts from landing tables."
+  comment = "Run inference to find toxic post titles."
 
   database  = snowflake_database.snowflake_ml.name
   schema    = snowflake_schema.reddit.name
