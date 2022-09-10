@@ -182,10 +182,11 @@ resource "snowflake_table" "ml_posts_clean" {
     type     = "VARCHAR(16777216)"
   }
 }
-resource "snowflake_table" "ml_posts_predictions" {
+
+resource "snowflake_table" "ml_posts_toxic" {
   database = snowflake_schema.reddit.database
   schema   = snowflake_schema.reddit.name
-  name     = "ML_POSTS_PREDICTIONS"
+  name     = "ML_POSTS_TOXIC"
   comment  = "Same as `ML_POSTS_CLEAN`, but include model inference and version."
 
   data_retention_days = snowflake_schema.reddit.data_retention_days
@@ -219,7 +220,7 @@ resource "snowflake_table" "ml_posts_predictions" {
   column {
     name     = "IS_TOXIC"
     nullable = true
-    type     = "NUMBER(38,0)"
+    type     = "NUMBER(38,37)"
   }
   column {
     name     = "MODEL_VERSION"

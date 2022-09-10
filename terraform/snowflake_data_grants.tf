@@ -164,10 +164,10 @@ resource "snowflake_table_grant" "ml_posts_clean" {
   shares            = []
 }
 
-resource "snowflake_table_grant" "ml_posts_predictions" {
-  database_name = snowflake_table.ml_posts_predictions.database
-  schema_name   = snowflake_table.ml_posts_predictions.schema
-  table_name    = snowflake_table.ml_posts_predictions.name
+resource "snowflake_table_grant" "ml_posts_toxic" {
+  database_name = snowflake_table.ml_posts_toxic.database
+  schema_name   = snowflake_table.ml_posts_toxic.schema
+  table_name    = snowflake_table.ml_posts_toxic.name
 
   with_grant_option = true
   privilege         = "OWNERSHIP"

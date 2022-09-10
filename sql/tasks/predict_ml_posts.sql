@@ -1,5 +1,5 @@
 INSERT INTO
-ml_posts_predictions(
+ml_posts_toxic(
     record_id,
     created_timestamp,
     subreddit,
