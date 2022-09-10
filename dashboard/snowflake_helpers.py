@@ -4,17 +4,17 @@ from typing import Dict, Optional
 import pandas as pd
 import streamlit as st
 
-from snowflake_ml import SessionML
+from scripts.snowflake_utils import Session
 
 
 @st.experimental_singleton
-def init_connection() -> SessionML:
+def init_connection() -> Session:
     """Initiatize Snowflake connection."""
-    return SessionML(**st.secrets["snowflake"])
+    return Session(**st.secrets["snowflake"])
 
 
 @st.experimental_memo(ttl=60 * 10)
-def snowflake2pd(table: str, _session: SessionML) -> pd.DataFrame:
+def snowflake2pd(table: str, _session: Session) -> pd.DataFrame:
     """Get a Snowflake table and return it as a pandas dataframe."""
     return _session.table(table).to_pandas()
 
