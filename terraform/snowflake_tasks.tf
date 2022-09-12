@@ -6,12 +6,12 @@ resource "snowflake_task" "get_new_posts" {
   warehouse = snowflake_warehouse.reddit_xs.name
 
   name               = "GET_NEW_POSTS"
-  schedule           = "USING CRON */5 * * * 1-5 Europe/Brussels"
+  schedule           = "USING CRON */1 * * * 1-5 Europe/Brussels"
   sql_statement      = file("${path.module}/../sql/tasks/get_new_posts.sql")
   session_parameters = {}
 
   when    = "system$stream_has_data('${snowflake_stream.new_posts.name}')"
-  enabled = false
+  enabled = false # change to `true` to resume
 }
 
 resource "snowflake_task" "clean_ml_posts" {
@@ -27,6 +27,8 @@ resource "snowflake_task" "clean_ml_posts" {
   after   = "GET_NEW_POSTS"
   when    = "system$stream_has_data('${snowflake_stream.new_ml_posts.name}')"
   enabled = true
+
+  depends_on = [snowflake_task.get_new_posts]
 }
 resource "snowflake_task" "predict_ml_posts" {
   comment = "Run inference to find toxic post titles."
@@ -35,12 +37,14 @@ resource "snowflake_task" "predict_ml_posts" {
   schema    = snowflake_schema.reddit.name
   warehouse = snowflake_warehouse.reddit_xs.name
 
+
   name          = "PREDICT_ML_POSTS"
   sql_statement = file("${path.module}/../sql/tasks/predict_ml_posts.sql")
 
-  after   = "CLEAN_ML_POSTS"
-  when    = "system$stream_has_data('${snowflake_stream.new_ml_posts_clean.name}')"
-  enabled = true
+  after      = "CLEAN_ML_POSTS"
+  when       = "system$stream_has_data('${snowflake_stream.new_ml_posts_clean.name}')"
+  enabled    = true
+  depends_on = [snowflake_task.get_new_posts, snowflake_task.clean_ml_posts]
 }
 
 resource "snowflake_stream" "new_posts" {
