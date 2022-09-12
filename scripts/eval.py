@@ -88,7 +88,7 @@ def get_table(table: str, session: SnowparkSession) -> DataFrame:
         session.table(table)
         .select(
             col('"is_toxic"'),
-            call_udf("ml_predict", col('"comment_text"'))["prediction"]
+            call_udf("ml_predict_dev", col('"comment_text"'))["prediction"]
             .cast(DecimalType())
             .as_("predicted"),
         )

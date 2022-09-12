@@ -21,3 +21,29 @@ resource "snowflake_role_grants" "confluent_grants" {
     snowflake_user.confluent.name
   ]
 }
+
+resource "snowflake_user" "streamlit" {
+  name         = "Streamlit user"
+  login_name   = "streamlit"
+  comment      = "A user for streamlit app."
+  password     = var.streamlit_password
+  disabled     = false
+  display_name = "Streamlit"
+
+  default_warehouse    = snowflake_warehouse.reddit_xs.name
+  default_role         = snowflake_role.streamlit.name
+  must_change_password = false
+}
+
+resource "snowflake_role" "streamlit" {
+  name    = "STREAMLIT_ROLE"
+  comment = "Allows users to display data in Streamlit applications."
+}
+
+resource "snowflake_role_grants" "streamlit_grants" {
+  role_name = snowflake_role.streamlit.name
+  users = [
+    snowflake_user.streamlit.name
+  ]
+  depends_on = [snowflake_role.streamlit]
+}

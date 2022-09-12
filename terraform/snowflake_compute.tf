@@ -9,6 +9,8 @@ resource "snowflake_warehouse_grant" "reddit_xs" {
   privilege      = "USAGE"
 
   roles = [
-    snowflake_role.confluent.name, data.snowflake_role.accountadmin.name
+    snowflake_role.streamlit.name,
+    snowflake_role.confluent.name,
+    data.snowflake_role.accountadmin.name
   ]
 }

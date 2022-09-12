@@ -2,19 +2,18 @@
 import streamlit as st
 
 from dashboard.layout_utils import set_layout
+from dashboard.snowflake_helpers import convert_df_types, init_connection
 
+# Main app
 set_layout()
+session = init_connection()
 
-st.markdown("# Content moderation")
-st.markdown(
-    """
-    ## Oh ooh....
-
-    ![](https://media.giphy.com/media/jkZtSdwKOx05BOlapR/giphy.gif)
-
-    **We're not quite there yet! We'll be working on this page over the following weeks
-    and we'll make sure to publish as soon as we can!**
-
-    Thanks for the understanding! 🚀
-    """
+st.title("Content moderation")
+st.header("Posts")
+st.dataframe(
+    session.table("ml_posts_toxic")
+    .to_pandas()
+    .pipe(convert_df_types, dtype_mapping={"IS_TOXIC": "float64"})
+    .set_index("RECORD_ID")
+    .sort_values(by=["IS_TOXIC", "CREATED_TIMESTAMP"], ascending=[False, False])
 )

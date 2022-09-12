@@ -34,7 +34,7 @@ jobs:
       - name: Print latest tag
         run: echo "${{ steps.latest-tag.outputs.tag }}"
 
-  eval:
+  deploy-udf:
     runs-on: ubuntu-latest
     needs: get-latest-tag
     env:

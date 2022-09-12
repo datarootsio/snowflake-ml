@@ -59,6 +59,8 @@ resource "confluent_kafka_topic" "reddit_posts" {
 }
 
 resource "confluent_connector" "snowflake" {
+  status = "PAUSED" # Change to "RUNNING"
+
   environment {
     id = confluent_environment.default.id
   }

@@ -9,7 +9,7 @@ import streamlit as st
 
 from dashboard.layout_utils import set_layout
 from dashboard.snowflake_helpers import convert_df_types, init_connection, snowflake2pd
-from snowflake_ml import SessionML
+from scripts.snowflake_utils import Session
 
 
 def _filter_options(
@@ -135,12 +135,13 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
 
 
 def _plot_summary(
-    title: str, table_name: str, session: SessionML, st_key: str, **dtypes_mapping: str
+    title: str, table_name: str, session: Session, st_key: str, **dtypes_mapping: str
 ) -> None:
     """Plot summaries for Snowflake table."""
     st.title(title)
-    df = snowflake2pd(table_name, _session=session)
-    df = convert_df_types(df, dtype_mapping=dtypes_mapping)
+    df = snowflake2pd(table_name, _session=session).pipe(
+        convert_df_types, dtype_mapping=dtypes_mapping
+    )
     _aggregated(df, st_key=st_key)
     _timeseries(df, st_key=st_key)
 
