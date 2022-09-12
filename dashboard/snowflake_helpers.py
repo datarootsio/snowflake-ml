@@ -13,7 +13,7 @@ def init_connection() -> Session:
     return Session(**st.secrets["snowflake"])
 
 
-@st.experimental_memo(ttl=60 * 10)
+@st.experimental_memo(ttl=60 * 2)
 def snowflake2pd(table: str, _session: Session) -> pd.DataFrame:
     """Get a Snowflake table and return it as a pandas dataframe."""
     return _session.table(table).to_pandas()

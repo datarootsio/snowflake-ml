@@ -139,8 +139,9 @@ def _plot_summary(
 ) -> None:
     """Plot summaries for Snowflake table."""
     st.title(title)
-    df = snowflake2pd(table_name, _session=session)
-    df = convert_df_types(df, dtype_mapping=dtypes_mapping)
+    df = snowflake2pd(table_name, _session=session).pipe(
+        convert_df_types, dtype_mapping=dtypes_mapping
+    )
     _aggregated(df, st_key=st_key)
     _timeseries(df, st_key=st_key)
 
