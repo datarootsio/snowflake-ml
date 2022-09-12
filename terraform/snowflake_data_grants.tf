@@ -3,7 +3,7 @@ resource "snowflake_database_grant" "snowflake_ml" {
   database_name = snowflake_database.snowflake_ml.name
 
   privilege = "USAGE"
-  roles     = [snowflake_role.confluent.name]
+  roles     = [snowflake_role.confluent.name, snowflake_role.streamlit.name]
 }
 
 resource "snowflake_schema_grant" "reddit_usage" {
@@ -11,7 +11,7 @@ resource "snowflake_schema_grant" "reddit_usage" {
   schema_name   = snowflake_schema.reddit.name
 
   privilege = "USAGE"
-  roles     = [snowflake_role.confluent.name]
+  roles     = [snowflake_role.confluent.name, snowflake_role.streamlit.name]
 }
 
 resource "snowflake_schema_grant" "reddit_create_materialized_view" {
@@ -132,13 +132,33 @@ resource "snowflake_view_grant" "posts_aggregated" {
   shares    = []
 }
 
+resource "snowflake_view_grant" "posts_aggregated_streamlit" {
+  database_name = snowflake_view.posts_aggregated.database
+  schema_name   = snowflake_view.posts_aggregated.schema
+  view_name     = snowflake_view.posts_aggregated.name
+
+  privilege = "SELECT"
+  roles     = [snowflake_role.streamlit.name]
+  shares    = []
+}
+
 resource "snowflake_view_grant" "comments_aggregated" {
-  database_name = snowflake_view.comments_typed.database
-  schema_name   = snowflake_view.comments_typed.schema
-  view_name     = snowflake_view.comments_typed.name
+  database_name = snowflake_view.comments_aggregated.database
+  schema_name   = snowflake_view.comments_aggregated.schema
+  view_name     = snowflake_view.comments_aggregated.name
 
   privilege = "OWNERSHIP"
   roles     = [data.snowflake_role.accountadmin.name]
+  shares    = []
+}
+
+resource "snowflake_view_grant" "comments_aggregated_streamlit" {
+  database_name = snowflake_view.comments_aggregated.database
+  schema_name   = snowflake_view.comments_aggregated.schema
+  view_name     = snowflake_view.comments_aggregated.name
+
+  privilege = "SELECT"
+  roles     = [snowflake_role.streamlit.name]
   shares    = []
 }
 
@@ -172,5 +192,16 @@ resource "snowflake_table_grant" "ml_posts_toxic" {
   with_grant_option = true
   privilege         = "OWNERSHIP"
   roles             = [data.snowflake_role.accountadmin.name]
+  shares            = []
+}
+
+resource "snowflake_table_grant" "ml_posts_toxic_streamlit" {
+  database_name = snowflake_table.ml_posts_toxic.database
+  schema_name   = snowflake_table.ml_posts_toxic.schema
+  table_name    = snowflake_table.ml_posts_toxic.name
+
+  with_grant_option = true
+  privilege         = "SELECT"
+  roles             = [snowflake_role.streamlit.name]
   shares            = []
 }

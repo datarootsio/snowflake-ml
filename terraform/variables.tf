@@ -63,3 +63,9 @@ variable "kafka_api_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "streamlit_password" {
+  description = "Password for Streamlit user in Snowflake."
+  type        = string
+  sensitive   = true
+}
