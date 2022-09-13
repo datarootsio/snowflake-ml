@@ -133,3 +133,6 @@ dmypy.json
 
 # Streamlit files
 .streamlit/secrets.toml
+
+# Pyenv file
+.python-version

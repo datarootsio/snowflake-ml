@@ -7,6 +7,8 @@ authors = ["Murilo Cunha <murilo@dataroots.io>"]
 [tool.poetry.dependencies]
 python = "~3.8"
 snowflake-snowpark-python = {extras = ["pandas"], version = "^0.8.0"}
+transformers = "4.18.0"
+torch = "1.10.2"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.20.0"
@@ -14,7 +16,6 @@ streamlit = "^1.11.1"
 htbuilder = "^0.6.0"
 toml = "^0.10.2"
 mistune = "^2.0"
-vendorize = "^0.2.2"
 scikit-learn = "^1.1.2"
 matplotlib = "^3.5.3"
 
