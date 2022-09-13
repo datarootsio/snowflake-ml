@@ -1,8 +1,10 @@
 """Create inference UDF using python Snowpark."""
 import os
+from datetime import datetime
 from pathlib import Path
 
-from snowflake.snowpark.functions import udf
+from snowflake.snowpark.functions import pandas_udf
+from snowflake.snowpark.types import PandasSeries
 
 from scripts.snowflake_utils import Session
 from snowflake_ml import __version__
@@ -14,6 +16,8 @@ def main() -> None:
     if not custom_libpath.is_file():
         raise ValueError(f"Expected wheel file, got {custom_libpath}.")
 
+    now = datetime.now().strftime("%Y%m%d-%H%M%S")
+
     with Session(
         database="snowflake_ml",
         account="vw42238",
@@ -24,15 +28,15 @@ def main() -> None:
         schema="reddit",
     ):
 
-        @udf(
+        @pandas_udf(
             name=f"ml_predict_{os.getenv('ENVIRONMENT', 'DEV')}",
             is_permanent=True,
-            stage_location=f"@py_udfs/{__version__}",
+            stage_location=f"@py_udfs/{__version__}/{now}",
             replace=True,
             imports=[str(custom_libpath)],
-            packages=["snowflake-snowpark-python"],
+            packages=["snowflake-snowpark-python==0.8.0"],
         )
-        def run(s: str) -> dict:
+        def run(ds: PandasSeries[str]) -> PandasSeries[dict]:
             import os
             import sys
 
@@ -42,7 +46,9 @@ def main() -> None:
             from snowflake_ml import __version__
             from snowflake_ml.model import predict
 
-            return {"prediction": predict(s), "model_version": __version__}
+            return ds.apply(
+                lambda s: {"prediction": predict(s), "model_version": __version__}
+            )
 
 
 if __name__ == "__main__":
