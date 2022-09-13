@@ -136,3 +136,6 @@ dmypy.json
 
 # Pyenv file
 .python-version
+
+# Models (development)
+/models
