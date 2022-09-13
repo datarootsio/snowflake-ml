@@ -1,6 +1,0 @@
-streamlit==1.12.2 ; python_version >= "3.8" and python_version < "3.9"
-htbuilder==0.6.0 ; python_version >= "3.8" and python_version < "3.9"
-pandas==1.4.4 ; python_version >= "3.8" and python_version < "3.9"
-snowflake-connector-python==2.7.12 ; python_version >= "3.8" and python_version < "3.9"
-snowflake-connector-python[pandas]==2.7.12 ; python_version >= "3.8" and python_version < "3.9"
-snowflake-snowpark-python[pandas]==0.8.0 ; python_version >= "3.8" and python_version < "3.9"
