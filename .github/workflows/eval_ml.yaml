@@ -51,10 +51,10 @@ jobs:
       - name: Install dependencies and build package
         run: |
           pip install poetry==${{ env.POETRY_VERSION }}
-          poetry config virtualenvs.create false
-          poetry install --no-interaction --no-ansi
           poetry version ${{ needs.get-latest-tag.outputs.latest-tag }}
           poetry version prerelease
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-ansi
           poetry build --format wheel
           # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
           echo "NEW_TAG=$(poetry version --short)" >> $GITHUB_ENV
