@@ -4,9 +4,16 @@ from typing import Sequence
 
 import pandas as pd
 
-from scripts import Session, write_pd
+from scripts import Session
 
-DATA_PATH = Path(__file__).parents[1] / "data" / "raw"
+
+def _write_pd(df: pd.DataFrame, table_name: str, session: Session) -> None:
+    """Write pandas dataframe to Snowflake."""
+    return (
+        session.create_dataframe(data=df)
+        .write.mode("overwrite")
+        .save_as_table(table_name)
+    )
 
 
 def _merge_labels(
@@ -40,6 +47,8 @@ def _merge_labels(
 
 if __name__ == "__main__":
     # Using `private_key_filepath` and `private_key_passphrase` from env vars
+    DATA_PATH = Path(__file__).parents[1] / "data" / "raw"
+
     train = DATA_PATH / "train.csv"
     test = DATA_PATH / "test.csv"
     test_labels = DATA_PATH / "test_labels.csv"
@@ -56,5 +65,5 @@ if __name__ == "__main__":
         region="eu-central-1",
         schema="reddit",
     ) as session:
-        write_pd(df=train, table_name="train", session=session)
-        write_pd(df=test, table_name="test", session=session)
+        _write_pd(df=train, table_name="train", session=session)
+        _write_pd(df=test, table_name="test", session=session)

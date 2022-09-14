@@ -1,11 +1,9 @@
 """Utility and helper functions - Session, CSVs and GZips."""
-import gzip
 import os
 from getpass import getpass
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Optional
 
-import pandas
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from snowflake.snowpark import Session as SnowparkSession
@@ -62,26 +60,3 @@ class Session(SnowparkSession):
             }
         super(Session, self).__init__(conn=ServerConnection(session_builder_kwargs))
         _add_session(self)
-
-
-def write_csv(
-    filepath: Union[Path, str],
-    table_name: str,
-    session: Session,
-    **read_csv_kwargs: Any,
-) -> None:
-    """Write CSV file to Snowflake."""
-    return write_pd(
-        df=pandas.read_csv(filepath, **read_csv_kwargs),
-        table_name=table_name,
-        session=session,
-    )
-
-
-def write_pd(df: pandas.DataFrame, table_name: str, session: Session) -> None:
-    """Write pandas dataframe to Snowflake."""
-    return (
-        session.create_dataframe(data=df)
-        .write.mode("overwrite")
-        .save_as_table(table_name)
-    )
