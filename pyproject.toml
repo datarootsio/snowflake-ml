@@ -8,6 +8,8 @@ authors = ["Murilo Cunha <murilo@dataroots.io>"]
 python = "~3.8"
 snowflake-snowpark-python = {extras = ["pandas"], version = "^0.8.0"}
 scikit-learn = "1.1.1"
+joblib = "^1.1.0"
+scipy = "1.7.1"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.20.0"
