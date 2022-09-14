@@ -9,7 +9,7 @@ set_layout()
 
 README = Path(__file__).parents[2] / "README.md"
 
-st.write(README.read_text())
+st.markdown(README.read_text(), unsafe_allow_html=True)
 
 st.markdown(
     """

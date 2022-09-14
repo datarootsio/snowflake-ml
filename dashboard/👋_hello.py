@@ -28,5 +28,10 @@ into Snowflake, which will process the data and show the aggregated data in Stre
 But first, let set the scene!
 
 ## Story time! 📖
+
+You answer on the second ring. It's the CEO of your company, Johannes. Congratulations
+is in order. You're the new Chief Data Officer (CDO)! The bad news is: we have
+absolutely no idea on how our data looks like. Luckily, you have a good idea on where
+to start...
 """
 )
