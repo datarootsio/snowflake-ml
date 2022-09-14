@@ -1,5 +1,5 @@
 resource "confluent_environment" "default" {
-  display_name = "default"
+  display_name = "snowflake-ml"
 }
 
 resource "confluent_kafka_cluster" "cluster_snowflake_ml" {
