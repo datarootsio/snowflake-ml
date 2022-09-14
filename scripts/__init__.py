@@ -1,7 +1,6 @@
 """Utility and helper functions - Session, CSVs and GZips."""
 import gzip
 import os
-import shutil
 from getpass import getpass
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -63,16 +62,6 @@ class Session(SnowparkSession):
             }
         super(Session, self).__init__(conn=ServerConnection(session_builder_kwargs))
         _add_session(self)
-
-
-def _ungz(*files: Path) -> List[Path]:
-    """Decompress `.gz` files."""
-    for file in files:
-        with gzip.open(file, "rb") as f_in:
-            with open(file.with_suffix(""), "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.remove(file)
-    return [file.with_suffix("") for file in files]
 
 
 def write_csv(
