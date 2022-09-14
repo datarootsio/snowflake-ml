@@ -46,7 +46,7 @@ def snowflake_train(_session: Session) -> List[str]:
         df = session.table("train").to_pandas()
 
         pipe = train(text=df["comment_text"], labels=df["is_toxic"], dir=root_artifacts)
-        with NamedTemporaryFile(dir=root_artifacts, suffix=".joblib") as tmpfile:
+        with NamedTemporaryFile(dir=root_artifacts, suffix=".joblib.gz") as tmpfile:
             save_model(pipeline=pipe, file=tmpfile)
             model = session.file.put(
                 local_file_name=tmpfile.name,

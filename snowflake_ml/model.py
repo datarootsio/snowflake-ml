@@ -6,7 +6,7 @@ Adapted from `https://towardsdatascience.com/
 """
 from pathlib import Path
 from tempfile import mkdtemp
-from typing import IO, Any, List, Union
+from typing import IO, Any, Union
 
 import joblib
 import numpy as np
@@ -44,12 +44,17 @@ def train(text: pd.Series, labels: pd.Series, **tmpdir_kwargs: Any) -> Pipeline:
     return pipe
 
 
-def predict(pipe: Pipeline, text: pd.Series) -> List[float]:
+def predict(pipe: Pipeline, text: pd.Series) -> np.ndarray:
     """Predict toxicity (`is_toxic=True`) probabilities from ML pipeline."""
     predictions = pipe.predict_proba(text)
-    return np.squeeze(predictions[:, pipe.classes_]).tolist()
+    return predictions[:, pipe.classes_].flatten()
 
 
 def save_model(pipeline: Pipeline, file: Union[str, Path, IO]) -> None:
     """Save the model pipeline."""
-    joblib.dump(pipeline, file)
+    joblib.dump(pipeline, file, compress=("gzip", 3))
+
+
+def load_model(file: Union[str, Path, IO]) -> Pipeline:
+    """Load the model pipeline."""
+    return joblib.load(file)
