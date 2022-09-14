@@ -14,7 +14,7 @@ from snowflake.snowpark.functions import call_udf, col, sproc
 from snowflake.snowpark.session import Session as SnowparkSession
 from snowflake.snowpark.types import DecimalType
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 from snowflake_ml import __version__
 
 
@@ -84,15 +84,11 @@ def get_classification_report(
 
 def get_table(table: str, session: SnowparkSession) -> DataFrame:
     """Get table from Snowflake."""
-    return (
-        session.table(table)
-        .select(
-            col('"is_toxic"'),
-            call_udf("ml_predict_dev", col('"comment_text"'))["prediction"]
-            .cast(DecimalType())
-            .as_("predicted"),
-        )
-        .limit(1000)
+    return session.table(table).select(
+        col('"is_toxic"'),
+        call_udf("ml_predict_dev", col('"comment_text"'))["prediction"]
+        .cast(DecimalType())
+        .as_("predicted"),
     )
 
 

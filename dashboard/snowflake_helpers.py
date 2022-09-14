@@ -4,7 +4,7 @@ from typing import Dict, Optional
 import pandas as pd
 import streamlit as st
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 
 
 @st.experimental_singleton
