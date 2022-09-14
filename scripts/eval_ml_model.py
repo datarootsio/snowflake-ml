@@ -1,7 +1,4 @@
 """Create evaluation plots (ROC and confusion matrix) and classification report."""
-import gzip
-import os
-import shutil
 from itertools import chain
 from pathlib import Path
 from typing import List, Sequence, Tuple
@@ -14,7 +11,7 @@ from snowflake.snowpark.functions import call_udf, col, sproc
 from snowflake.snowpark.session import Session as SnowparkSession
 from snowflake.snowpark.types import DecimalType
 
-from scripts.snowflake_utils import Session
+from scripts import Session, _ungz
 from snowflake_ml import __version__
 
 
@@ -121,16 +118,6 @@ def _build_plots(session: SnowparkSession, dir: Path) -> Tuple[Path, Path, Path]
         txt_path=dir / "report.txt",
     )
     return roc_path, cnf_mat_path, report_path
-
-
-def _ungz(*files: Path) -> List[Path]:
-    """Decompress `.gz` files."""
-    for file in files:
-        with gzip.open(file, "rb") as f_in:
-            with open(file.with_suffix(""), "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.remove(file)
-    return [file.with_suffix("") for file in files]
 
 
 def run_sproc(_session: Session) -> List[str]:

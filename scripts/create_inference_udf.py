@@ -6,7 +6,7 @@ from pathlib import Path
 from snowflake.snowpark.functions import pandas_udf
 from snowflake.snowpark.types import PandasSeries
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 from snowflake_ml import __version__
 
 
@@ -47,7 +47,7 @@ def main() -> None:
             from snowflake_ml.model import predict
 
             return ds.apply(
-                lambda s: {"prediction": predict(s), "model_version": __version__}
+                lambda s: {"prediction": predict(..., s), "model_version": __version__}
             )
 
 

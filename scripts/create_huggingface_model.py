@@ -10,7 +10,7 @@ from transformers import (
     PreTrainedTokenizer,
 )
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 from snowflake_ml import __version__
 
 

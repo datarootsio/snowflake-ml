@@ -6,7 +6,7 @@ from typing import List
 from snowflake.snowpark.functions import sproc
 from snowflake.snowpark.session import Session as SnowparkSession
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 from snowflake_ml import __version__
 
 

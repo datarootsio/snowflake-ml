@@ -9,7 +9,7 @@ import streamlit as st
 
 from dashboard.layout_utils import set_layout
 from dashboard.snowflake_helpers import convert_df_types, init_connection, snowflake2pd
-from scripts.snowflake_utils import Session
+from scripts import Session
 
 
 def _filter_options(

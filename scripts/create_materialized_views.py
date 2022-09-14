@@ -1,7 +1,7 @@
 """Scripts to create materialized views (not possible via Terraform)."""
 from pathlib import Path
 
-from scripts.snowflake_utils import Session
+from scripts import Session
 
 PATH_SQL = Path(__file__).parents[1] / "sql"
 

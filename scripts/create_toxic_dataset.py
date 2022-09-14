@@ -4,8 +4,7 @@ from typing import Sequence
 
 import pandas as pd
 
-from scripts import write
-from scripts.snowflake_utils import Session
+from scripts import Session, write_pd
 
 DATA_PATH = Path(__file__).parents[1] / "data" / "raw"
 
@@ -57,5 +56,5 @@ if __name__ == "__main__":
         region="eu-central-1",
         schema="reddit",
     ) as session:
-        write.pd(df=train, table_name="train", session=session)
-        write.pd(df=test, table_name="test", session=session)
+        write_pd(df=train, table_name="train", session=session)
+        write_pd(df=test, table_name="test", session=session)
