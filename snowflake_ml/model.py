@@ -9,6 +9,7 @@ import torch
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    PreTrainedTokenizer,
     Trainer,
     TrainingArguments,
 )
@@ -18,11 +19,13 @@ from transformers.tokenization_utils_base import BatchEncoding
 class ToxicModel(torch.nn.Module):
     """PyTorch pretrained `unitary/toxic-bert` from HuggingFace model hub."""
 
-    def __init__(self: ToxicModel) -> None:
+    def __init__(
+        self: ToxicModel, *from_pretrained_args: str, **from_pretrained_kwargs: Any
+    ) -> None:
         """Initialize model with one extra layer to convert it to binary problem."""
         super(ToxicModel, self).__init__()
         self.pretrained = AutoModelForSequenceClassification.from_pretrained(
-            "unitary/toxic-bert"
+            *from_pretrained_args, **from_pretrained_kwargs
         )
         self.linear = torch.nn.Linear(6, 1)  # go from 6 outputs to 1
         self.sigmoid = torch.nn.Sigmoid()
@@ -83,18 +86,22 @@ class ToxicDataset(torch.utils.data.Dataset):
 
 
 def _process_data(
-    data: pd.DataFrame, x_col: str = "comment_text", y_col: str = "is_toxic"
+    data: pd.DataFrame,
+    tokenizer: PreTrainedTokenizer,
+    x_col: str = "comment_text",
+    y_col: str = "is_toxic",
 ) -> ToxicDataset:
     """Tokenize data from dataframe."""
-    tokenizer = AutoTokenizer.from_pretrained("unitary/toxic-bert")
     train_encodings = tokenizer(data[x_col].tolist(), truncation=True, padding=True)
     train_dataset = ToxicDataset(train_encodings, data[y_col].tolist())
     return train_dataset
 
 
-def get_model_untrained() -> torch.nn.Module:
+def get_model_untrained(
+    *toxic_model_args: str, **toxic_model_kwargs: Any
+) -> torch.nn.Module:
     """Get untrained model."""
-    model = ToxicModel().freeze_pretrained()
+    model = ToxicModel().freeze_pretrained(*toxic_model_args, **toxic_model_kwargs)
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
     return model
@@ -126,14 +133,15 @@ def save_model(model: torch.nn.Module, model_dir: Path) -> Path:
 
 def train(
     model: torch.nn.Module,
+    tokenizer: PreTrainedTokenizer,
     output_dir: str,
     train_data: pd.DataFrame,
     eval_data: Optional[pd.DataFrame] = None,
     **trainer_kwargs: Any,
 ) -> torch.nn.Module:
     """Train HuggingFace model using `transformers.Trainer`."""
-    train_dataset = _process_data(train_data)
-    training_args = TrainingArguments(output_dir, **trainer_kwargs)
+    train_dataset = _process_data(train_data, tokenizer=tokenizer)
+    training_args = TrainingArguments(str(output_dir), **trainer_kwargs)
     trainer = Trainer(
         model=model,
         args=training_args,

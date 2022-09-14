@@ -72,7 +72,7 @@ jobs:
           SNOWSQL_PRIVATE_KEY_FILEPATH: ${{ env.SNOWSQL_PRIVATE_KEY_PATH }}
         run: |
           python scripts/create_inference_udf.py
-          python scripts/eval.py
+          python scripts/eval_ml_model.py
 
           cat report.txt >> report.md
           cml publish roc.png --md >> report.md

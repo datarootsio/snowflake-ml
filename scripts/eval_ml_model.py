@@ -1,7 +1,4 @@
 """Create evaluation plots (ROC and confusion matrix) and classification report."""
-import gzip
-import os
-import shutil
 from itertools import chain
 from pathlib import Path
 from typing import List, Sequence, Tuple
@@ -16,6 +13,7 @@ from snowflake.snowpark.types import DecimalType
 
 from scripts.snowflake_utils import Session
 from snowflake_ml import __version__
+from snowflake_ml.misc import ungz
 
 
 def get_confusion_matrix(
@@ -123,16 +121,6 @@ def _build_plots(session: SnowparkSession, dir: Path) -> Tuple[Path, Path, Path]
     return roc_path, cnf_mat_path, report_path
 
 
-def _ungz(*files: Path) -> List[Path]:
-    """Decompress `.gz` files."""
-    for file in files:
-        with gzip.open(file, "rb") as f_in:
-            with open(file.with_suffix(""), "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.remove(file)
-    return [file.with_suffix("") for file in files]
-
-
 def run_sproc(_session: Session) -> List[str]:
     """Create and run temporary Snowflake stored procedure."""
 
@@ -176,5 +164,5 @@ if __name__ == "__main__":
             stage_location=f"@ml_eval/{__version__}",
             target_directory=f"file://{Path.cwd().resolve()}",
         )
-        local_files = _ungz(*[Path(f.file) for f in files])
+        local_files = ungz(*[Path(f.file) for f in files])
         print("local files:", local_files)
