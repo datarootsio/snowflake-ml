@@ -42,10 +42,9 @@ def snowflake_train(_session: Session) -> List[str]:
         from snowflake_ml.model import save_model, train
 
         root_artifacts = Path("/tmp")
-
         df = session.table("train").to_pandas()
-
         pipe = train(text=df["comment_text"], labels=df["is_toxic"], dir=root_artifacts)
+
         with NamedTemporaryFile(dir=root_artifacts, suffix=".joblib.gz") as tmpfile:
             save_model(pipeline=pipe, file=tmpfile)
             model = session.file.put(
