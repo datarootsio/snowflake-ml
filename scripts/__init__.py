@@ -20,7 +20,7 @@ class Session(SnowparkSession):
         private_key_file: Optional[str] = None,
         private_key_passphrase: Optional[str] = None,
         **session_builder_kwargs: str,
-    ):
+    ) -> None:
         """
         Initialize session directly (without session builder).
 
@@ -58,5 +58,5 @@ class Session(SnowparkSession):
                 **session_builder_kwargs,
                 "private_key": private_key_contents,
             }
-        super(Session, self).__init__(conn=ServerConnection(session_builder_kwargs))
+        super().__init__(conn=ServerConnection(session_builder_kwargs))
         _add_session(self)

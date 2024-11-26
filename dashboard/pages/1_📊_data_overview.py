@@ -6,7 +6,6 @@ from typing import Any, Dict, Sequence, Tuple
 
 import pandas as pd
 import streamlit as st
-
 from dashboard.layout_utils import set_layout
 from dashboard.snowflake_helpers import convert_df_types, init_connection, snowflake2pd
 from scripts import Session
@@ -45,7 +44,7 @@ def _aggregated(df: pd.DataFrame, plot_height: int = 600, **filter_kwargs: Any) 
     ## Aggregated data
 
     Choose which dimension to filter the data on:
-    """
+    """,
     )
     agg_cols = df.select_dtypes(include="number", exclude=["boolean", "float"]).columns
     avg_cols = df.select_dtypes(include="float").columns
@@ -91,7 +90,7 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
     ## Timeseries data
 
     Choose which dimension and KPI to visualize:
-    """
+    """,
     )
     agg_cols = df.select_dtypes(include="number", exclude=["boolean", "float"]).columns
     avg_cols = df.select_dtypes(include="float").columns
@@ -120,11 +119,11 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
             .sum()
             .assign(
                 AVERAGE_TITLE_LENGTH=lambda _df: _df["SUM_TITLE_LENGTH"]
-                / _df["NUMBER_OF_RECORDS"]
+                / _df["NUMBER_OF_RECORDS"],
             )
             .assign(
                 AVERAGE_BODY_LENGTH=lambda _df: _df["SUM_BODY_LENGTH"]
-                / _df["NUMBER_OF_RECORDS"]
+                / _df["NUMBER_OF_RECORDS"],
             )
             .loc[:, ["AVERAGE_TITLE_LENGTH", "AVERAGE_BODY_LENGTH"]]
         )
@@ -135,12 +134,12 @@ def _timeseries(df: pd.DataFrame, st_key: str) -> None:
 
 
 def _plot_summary(
-    title: str, table_name: str, session: Session, st_key: str, **dtypes_mapping: str
+    title: str, table_name: str, session: Session, st_key: str, **dtypes_mapping: str,
 ) -> None:
     """Plot summaries for Snowflake table."""
     st.title(title)
     df = snowflake2pd(table_name, _session=session).pipe(
-        convert_df_types, dtype_mapping=dtypes_mapping
+        convert_df_types, dtype_mapping=dtypes_mapping,
     )
     _aggregated(df, st_key=st_key)
     _timeseries(df, st_key=st_key)

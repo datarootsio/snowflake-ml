@@ -7,10 +7,10 @@ from tempfile import TemporaryDirectory
 from sklearn.pipeline import Pipeline
 from snowflake.snowpark.functions import pandas_udf
 from snowflake.snowpark.types import PandasSeries
-
-from scripts import Session
 from snowflake_ml import __version__
 from snowflake_ml.model import load_model
+
+from scripts import Session
 
 
 def create_udf_from_stage(_session: Session, pipe: Pipeline) -> None:
@@ -42,12 +42,11 @@ def create_udf_from_stage(_session: Session, pipe: Pipeline) -> None:
         sys.path.append(os.path.join(import_dir, custom_libpath.name))
 
         import pandas as pd
-
         from snowflake_ml import __version__
         from snowflake_ml.model import predict
 
         predictions = pd.DataFrame(
-            {"prediction": predict(pipe=pipe, text=ds), "model_version": __version__}
+            {"prediction": predict(pipe=pipe, text=ds), "model_version": __version__},
         )
         return pd.Series(predictions.to_dict("records"))
 

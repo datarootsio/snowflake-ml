@@ -10,7 +10,7 @@ def _create_matview_from_file(file: Path, session: Session) -> None:
     """Small convenience function to create materialized views from files."""
     table = session.sql(
         f"create or replace materialized"
-        f" view snowflake_ml.reddit.{file.stem} as\n" + file.read_text()
+        f" view snowflake_ml.reddit.{file.stem} as\n" + file.read_text(),
     )
     print(table.collect())
 

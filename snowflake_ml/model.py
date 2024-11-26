@@ -32,7 +32,7 @@ def model() -> BaseEstimator:
 def get_pipeline(**pipeline_kwargs: Any) -> Pipeline:
     """Get the machine learning pipeline."""
     return Pipeline(
-        steps=[("vectorizer", preprocessor()), ("clf", model())], **pipeline_kwargs
+        steps=[("vectorizer", preprocessor()), ("clf", model())], **pipeline_kwargs,
     )
 
 

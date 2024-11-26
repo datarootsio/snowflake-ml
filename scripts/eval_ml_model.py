@@ -13,9 +13,9 @@ from snowflake.snowpark.dataframe import DataFrame
 from snowflake.snowpark.functions import call_udf, col, sproc
 from snowflake.snowpark.session import Session as SnowparkSession
 from snowflake.snowpark.types import DecimalType
+from snowflake_ml import __version__
 
 from scripts import Session
-from snowflake_ml import __version__
 
 
 def get_confusion_matrix(
@@ -53,7 +53,7 @@ def get_roc_curve(
     :return: Absolute path where file is written to
     """
     display = metrics.RocCurveDisplay.from_predictions(
-        y_true=y_true, y_pred=y_pred, name=display_name
+        y_true=y_true, y_pred=y_pred, name=display_name,
     )
     display.plot()
     plt.savefig(img_path)
@@ -104,11 +104,11 @@ def _build_plots(session: SnowparkSession, dir: Path) -> Tuple[Path, Path, Path]
     )
 
     df = data.select(
-        col('"is_toxic"'), (col("predicted") > 0.5).as_("predicted")
+        col('"is_toxic"'), (col("predicted") > 0.5).as_("predicted"),
     ).to_pandas()
 
     cnf_mat_path = get_confusion_matrix(
-        y_true=df["is_toxic"], y_pred=df["PREDICTED"], img_path=dir / "cnf_mat.png"
+        y_true=df["is_toxic"], y_pred=df["PREDICTED"], img_path=dir / "cnf_mat.png",
     )
     report_path = get_classification_report(
         y_true=df["is_toxic"],
@@ -122,9 +122,8 @@ def _build_plots(session: SnowparkSession, dir: Path) -> Tuple[Path, Path, Path]
 def _ungz(*files: Path) -> List[Path]:
     """Decompress `.gz` files."""
     for file in files:
-        with gzip.open(file, "rb") as f_in:
-            with open(file.with_suffix(""), "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
+        with gzip.open(file, "rb") as f_in, open(file.with_suffix(""), "wb") as f_out:
+            shutil.copyfileobj(f_in, f_out)
         os.remove(file)
     return [file.with_suffix("") for file in files]
 

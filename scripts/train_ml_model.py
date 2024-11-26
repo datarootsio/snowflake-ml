@@ -5,9 +5,9 @@ from typing import List
 
 from snowflake.snowpark.functions import sproc
 from snowflake.snowpark.session import Session as SnowparkSession
+from snowflake_ml import __version__
 
 from scripts import Session
-from snowflake_ml import __version__
 
 
 def snowflake_train(_session: Session) -> List[str]:

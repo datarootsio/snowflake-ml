@@ -3,7 +3,6 @@ from typing import Dict, Optional
 
 import pandas as pd
 import streamlit as st
-
 from scripts import Session
 
 
@@ -20,7 +19,7 @@ def snowflake2pd(table: str, _session: Session) -> pd.DataFrame:
 
 
 def convert_df_types(
-    df: pd.DataFrame, dtype_mapping: Optional[Dict[str, str]] = None
+    df: pd.DataFrame, dtype_mapping: Optional[Dict[str, str]] = None,
 ) -> pd.DataFrame:
     """Convert dataframe types."""
     # Manually map types that are not converted correctly

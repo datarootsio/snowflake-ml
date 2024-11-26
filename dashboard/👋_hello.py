@@ -1,6 +1,5 @@
 """Langing page on application."""
 import streamlit as st
-
 from dashboard.layout_utils import set_layout
 
 set_layout(layout="centered")
@@ -33,5 +32,5 @@ You answer on the second ring. It's the CEO of your company, Johannes. Congratul
 is in order. You're the new Chief Data Officer (CDO)! The bad news is: we have
 absolutely no idea on how our data looks like. Luckily, you have a good idea on where
 to start...
-"""
+""",
 )

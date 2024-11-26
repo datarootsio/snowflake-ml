@@ -26,7 +26,7 @@ def _merge_labels(
         "insult",
         "identity_hate",
     ),
-    out_cols: Sequence[str] = ("id", "comment_text", "is_toxic")
+    out_cols: Sequence[str] = ("id", "comment_text", "is_toxic"),
 ) -> pd.DataFrame:
     """Merge toxicity labels."""
     if not (0 < len(dfs) <= 2):
@@ -34,7 +34,7 @@ def _merge_labels(
     if len(dfs) > 1:
         text, labels = dfs
         data = pd.concat([text, labels], join="inner", axis="columns").loc[
-            :, lambda _df: ~_df.columns.duplicated()
+            :, lambda _df: ~_df.columns.duplicated(),
         ]
     else:
         data = dfs[0]
